@@ -30,8 +30,8 @@
       top: 46%;
       left: 50%;
       transform: translate(-50%, -50%);
-      max-width: 265px;
-      max-height: 265px;
+      max-width: 280px;
+      max-height: 280px;
       z-index: 2;
       border-radius: 12px;
       box-shadow: 0 0 25px rgba(255, 105, 180, 0.8), 0 0 50px rgba(255, 105, 180, 0.5);
@@ -51,7 +51,7 @@
 
     #love-text {
       position: absolute;
-      top: calc(50% + 60px);
+      top: calc(50% + 80px);
       left: 50%;
       transform: translateX(-50%);
       font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -68,7 +68,43 @@
   <img src="https://assets.onecompiler.app/43n2pjfqw/43n2q84vp/11.jpg" id="center-image">
   <div id="love-text">LOVE YOU</div>
   <canvas id="pinkboard"></canvas>
+  <canvas id="spiral-canvas"></canvas>
 
+  <!-- Spiral only (no flying heart) -->
+  <script>
+    const spiralCanvas = document.getElementById('spiral-canvas');
+    const ctxSpiral = spiralCanvas.getContext('2d');
+
+    function resizeSpiralCanvas() {
+      spiralCanvas.width = window.innerWidth;
+      spiralCanvas.height = window.innerHeight;
+    }
+    resizeSpiralCanvas();
+    window.addEventListener('resize', resizeSpiralCanvas);
+
+    function animateSpiral() {
+      requestAnimationFrame(animateSpiral);
+      ctxSpiral.clearRect(0, 0, spiralCanvas.width, spiralCanvas.height);
+
+      const centerX = spiralCanvas.width / 2;
+      const centerY = spiralCanvas.height / 2 + 100;
+
+      for (let i = 0; i < 100; i++) {
+        const angle = (Date.now() * 0.001 + i * 0.3) % (2 * Math.PI);
+        const radius = 30 + i * 0.6;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+        ctxSpiral.fillStyle = `rgba(255, 255, 255, ${0.02 + 0.01 * i})`;
+        ctxSpiral.beginPath();
+        ctxSpiral.arc(x, y, 1.5, 0, Math.PI * 2);
+        ctxSpiral.fill();
+      }
+    }
+
+    animateSpiral();
+  </script>
+
+  <!-- Heart particle system (original) -->
   <script>
     var settings = {
       particles: {
@@ -224,7 +260,7 @@
           context.lineTo(point.x, point.y);
         }
         context.closePath();
-        context.fillStyle = '#ea80b0';
+        context.fillStyle = '#ea80b0'; // Màu hồng gốc
         context.fill();
 
         var img = new Image();
