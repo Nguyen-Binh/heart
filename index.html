@@ -158,39 +158,50 @@
   <canvas id="spiral-canvas"></canvas>
 
   <script>
-    function typeText(element, text, speed = 40) {
-  element.innerHTML = '';
-  let i = 0;
-  function typing() {
-    if (i < text.length) {
-      if (text.substr(i, 4) === '<br>') {
-        element.innerHTML += '<br>';
-        i += 4;
+function typeText(element, text, speed = 40) {
+  return new Promise((resolve) => {
+    element.innerHTML = '';
+    let i = 0;
+    function typing() {
+      if (i < text.length) {
+        if (text.substr(i, 4) === '<br>') {
+          element.innerHTML += '<br>';
+          i += 4;
+        } else {
+          element.innerHTML += text[i];
+          i++;
+        }
+        setTimeout(typing, speed);
       } else {
-        element.innerHTML += text[i];
-        i++;
+        resolve(); // báo hiệu hoàn thành
       }
-      setTimeout(typing, speed);
     }
-  }
-  typing();
+    typing();
+  });
 }
-      document.getElementById('start-button').addEventListener('click', function () {
-      document.getElementById('start-overlay').style.display = 'none';
-      document.getElementById('center-image').style.display = 'block';
-      document.getElementById('love-text').style.display = 'block';
-      const messageText1 = document.getElementById('message-text1');
-      const messageText2 = document.getElementById('message-text2');
-      messageText1.style.display = 'block';
-      messageText2.style.display = 'block';
-      const content1 = `Gặp em là một điều thật tuyệt vời. Có lẽ anh đã giành hết may mắn vào điều đó.<br>
-Bởi vì anh đã từng một mình rất lâu trước đó, nên sự xuất hiện của em như thể là một điều dịu dàng nhất trên hành trình của anh.`;
-      const content2 = `Nếu có thể, anh muốn hạnh phúc của anh...<br>
+  document.getElementById('start-button').addEventListener('click', async function () {
+  document.getElementById('start-overlay').style.display = 'none';
+  document.getElementById('center-image').style.display = 'block';
+  document.getElementById('love-text').style.display = 'block';
+
+  const messageText1 = document.getElementById('message-text1');
+  const messageText2 = document.getElementById('message-text2');
+
+  const content1 = `Gặp em là một điều thật tuyệt vời. Có lẽ anh đã giành hết may mắn vào điều đó.<br>
+Bởi vì anh đã từng một mình rất lâu trước đó, nên sự xuất hiện của em như thể là một điều dịu dàng nhất trong cuộc sống bộn bề này.`;
+
+  const content2 = `Nếu có thể, anh muốn hạnh phúc của anh...<br>
 Có em, luôn có em trong đó.`;
-      typeText(messageText1, content1);
-      typeText(messageText2, content2);
-      document.getElementById('bg-music').play();
-    });
+
+  messageText1.style.display = 'block';
+  await typeText(messageText1, content1);   // Chờ messageText1 xong
+
+  messageText2.style.display = 'block';
+  await typeText(messageText2, content2);   // Rồi mới hiện messageText2
+
+  document.getElementById('bg-music').play();
+});
+
   </script>
 
   <!-- Spiral only (no flying heart) -->
