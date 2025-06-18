@@ -18,7 +18,7 @@
       background: rgba(0,0,0,0.85);
       color: #fff;
       font-family: 'Segoe UI', sans-serif;
-      font-size: 30px;
+      font-size: 34px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -29,8 +29,8 @@
 
     #start-button {
       margin-top: 20px;
-      padding: 10px 30px;
-      font-size: 20px;
+      padding: 30px 50px;
+      font-size: 34px;
       background-color: #ff69b4;
       color: white;
       border: none;
@@ -100,7 +100,7 @@
       width: 90%;
       max-width: 600px;
       font-family: 'Segoe UI', sans-serif;
-      font-size: 24px;
+      font-size: 28px;
       color: #ffb6c1;
       text-align: center;
       line-height: 1.6;
@@ -139,11 +139,38 @@
   <canvas id="spiral-canvas"></canvas>
 
   <script>
+    function typeText(element, text, speed = 40) {
+      element.innerHTML = '';
+      let i = 0;
+      function typing() {
+        if (i < text.length) {
+          if (text[i] === '\') {
+            if (text[i+1] === 'n') {
+              element.innerHTML += '<br>';
+              i += 2;
+            } else {
+              element.innerHTML += text[i++];
+            }
+          } else {
+            element.innerHTML += text[i++];
+          }
+          setTimeout(typing, speed);
+        }
+      }
+      typing();
+    }
+
     document.getElementById('start-button').addEventListener('click', function () {
       document.getElementById('start-overlay').style.display = 'none';
       document.getElementById('center-image').style.display = 'block';
       document.getElementById('love-text').style.display = 'block';
-      document.getElementById('message-text').style.display = 'block';
+      const messageText = document.getElementById('message-text');
+      messageText.style.display = 'block';
+      const content = `Gặp em là một điều thật tuyệt vời. Có lẽ anh đã giành hết may mắn vào điều đó.<br>
+Bởi vì anh đã từng một mình rất lâu trước đó, nên sự xuất hiện của em như thể là một điều dịu dàng nhất trong cuộc sống bộn bề này.<br>
+Nếu có thể, anh muốn hạnh phúc của anh...<br>
+Có em, luôn có em trong đó.`;
+      typeText(messageText, content);
       document.getElementById('bg-music').play();
     });
   </script>
