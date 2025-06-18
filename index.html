@@ -47,10 +47,29 @@
       display: block;
     }
 
-    @keyframes heart {
-      0% { transform: scale(1); }
-      30% { transform: scale(.8); }
-      100% { transform: scale(1); }
+    @keyframes pulse-glow {
+      0% { text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493; }
+      50% { text-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493; }
+      100% { text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493; }
+    }
+
+    @keyframes loveZoom {
+      0% {
+        transform: translateX(-50%) scale(1);
+        text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+      }
+      100% {
+        transform: translateX(-50%) scale(1.8);
+        text-shadow: 0 0 30px #ff69b4, 0 0 60px #ff1493, 0 0 90px #ff1493;
+      }
+    }
+
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .love-zoom-effect {
+      animation: loveZoom 1.5s ease-out forwards;
     }
 
     #center-image {
@@ -67,12 +86,6 @@
       display: none;
     }
 
-    @keyframes pulse-glow {
-      0% { box-shadow: 0 0 10px rgba(255, 105, 180, 0.3), 0 0 20px rgba(255, 105, 180, 0.2); }
-      50% { box-shadow: 0 0 30px rgba(255, 105, 180, 0.9), 0 0 60px rgba(255, 105, 180, 0.6); }
-      100% { box-shadow: 0 0 10px rgba(255, 105, 180, 0.3), 0 0 20px rgba(255, 105, 180, 0.2); }
-    }
-
     @keyframes floatUpDown {
       0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
       50% { transform: translate(-50%, -50%) translateY(-10px); }
@@ -86,9 +99,7 @@
       font-family: 'Comic Sans MS', cursive, sans-serif;
       font-size: 30px;
       color: #ff69b4;
-      text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
       z-index: 3;
-      animation: pulse-glow 2s ease-in-out infinite;
       display: none;
     }
 
@@ -104,7 +115,6 @@
       text-align: center;
       line-height: 1.6;
       z-index: 3;
-      animation: fadein 3s ease-in-out;
       white-space: pre-line;
       display: none;
     }
@@ -116,29 +126,8 @@
     #message-text2 {
       top: calc(50% + 350px);
     }
-
-    @keyframes fadein {
-      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-      to { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-
-    @keyframes loveZoom {
-      0% {
-        transform: translateX(-50%) scale(1);
-        text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
-      }
-      100% {
-        transform: translateX(-50%) scale(1.8);
-        text-shadow: 0 0 30px #ff69b4, 0 0 60px #ff1493, 0 0 90px #ff1493;
-      }
-    }
-
-    .love-zoom-effect {
-      animation: loveZoom 1.6s ease-out forwards;
-    }
   </style>
 </head>
-
 <body>
   <audio id="bg-music" loop>
     <source src="https://nguyen-binh.github.io/heart/My_love.mp3" type="audio/mpeg">
@@ -184,7 +173,10 @@
 
       document.getElementById('start-overlay').style.display = 'none';
       document.getElementById('center-image').style.display = 'block';
-      document.getElementById('love-text').style.display = 'block';
+
+      const loveText = document.getElementById('love-text');
+      loveText.classList.add('pulse-glow');
+      loveText.style.display = 'block';
 
       const messageText1 = document.getElementById('message-text1');
       const messageText2 = document.getElementById('message-text2');
@@ -202,7 +194,8 @@ Vậy nhé !!!!!`;
       messageText2.style.display = 'block';
       await typeText(messageText2, content2);
 
-      document.getElementById('love-text').classList.add('love-zoom-effect');
+      loveText.classList.remove('pulse-glow');
+      loveText.classList.add('love-zoom-effect');
     });
   </script>
 <script>
