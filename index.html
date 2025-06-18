@@ -126,6 +126,21 @@
     #message-text2 {
       top: calc(50% + 350px);
     }
+ @keyframes bounceGlow {
+  0%, 100% {
+    transform: translateX(-50%) scale(1.8) translateY(0);
+    text-shadow: 0 0 30px #ff69b4, 0 0 60px #ff1493, 0 0 100px #ff1493;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.8) translateY(-10px);
+    text-shadow: 0 0 40px #ff69b4, 0 0 80px #ff1493, 0 0 120px #ff1493;
+  }
+}
+
+.bounce-glow {
+  animation: bounceGlow 1s ease-in-out infinite;
+}
+
   </style>
 </head>
 <body>
@@ -193,6 +208,10 @@
 
       loveText.classList.remove('pulse-glow');
       loveText.classList.add('love-zoom-effect');
+      loveText.addEventListener('animationend', function handler() {
+      loveText.classList.remove('love-zoom-effect');
+      loveText.classList.add('bounce-glow');
+      loveText.removeEventListener('animationend', handler);
     });
   </script>
 <script>
