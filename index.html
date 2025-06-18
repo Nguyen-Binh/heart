@@ -3,7 +3,6 @@
 <head>
   <title>Love you (Doan Thu Thuy)</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     html, body {
       overflow: hidden;
@@ -62,14 +61,6 @@
       z-index: 3;
       animation: pulse-glow 2s ease-in-out infinite;
     }
-
-    /* Zoom to 125% on mobile devices */
-    @media only screen and (max-width: 768px) {
-      body {
-        transform: scale(1.25);
-        transform-origin: top center;
-      }
-    }
   </style>
 </head>
 
@@ -79,7 +70,7 @@
   <canvas id="pinkboard"></canvas>
   <canvas id="spiral-canvas"></canvas>
 
-  <!-- Spiral effect -->
+  <!-- Spiral only (no flying heart) -->
   <script>
     const spiralCanvas = document.getElementById('spiral-canvas');
     const ctxSpiral = spiralCanvas.getContext('2d');
@@ -113,7 +104,7 @@
     animateSpiral();
   </script>
 
-  <!-- Heart particle effect -->
+  <!-- Heart particle system (original) -->
   <script>
     var settings = {
       particles: {
@@ -145,7 +136,7 @@
       if (!window.cancelAnimationFrame) {
         window.cancelAnimationFrame = function (d) { clearTimeout(d) }
       }
-    })();
+    }());
 
     var Point = function (x, y) {
       this.x = x || 0;
@@ -269,7 +260,7 @@
           context.lineTo(point.x, point.y);
         }
         context.closePath();
-        context.fillStyle = '#ea80b0';
+        context.fillStyle = '#ea80b0'; // Màu hồng gốc
         context.fill();
 
         var img = new Image();
