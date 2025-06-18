@@ -195,7 +195,7 @@ Có em, luôn có em trong đó.`;
         const radius = 30 + i * 0.6;
         const x = centerX + radius * Math.cos(angle);
         const y = centerY + radius * Math.sin(angle);
-        ctxSpiral.fillStyle = rgba(255, 255, 255, ${0.02 + 0.01 * i});
+        ctxSpiral.fillStyle = `rgba(255, 255, 255, ${0.02 + 0.01 * i})`;
         ctxSpiral.beginPath();
         ctxSpiral.arc(x, y, 1.5, 0, Math.PI * 2);
         ctxSpiral.fill();
