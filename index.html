@@ -92,7 +92,24 @@
       display: none;
     }
 
-    #message-text {
+    #message-text1 {
+      position: absolute;
+      top: calc(50% - 350px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 600px;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 28px;
+      color: #ffb6c1;
+      text-align: center;
+      line-height: 1.6;
+      z-index: 3;
+      animation: fadein 3s ease-in-out;
+      white-space: pre-line;
+      display: none;
+    }
+    #message-text2 {
       position: absolute;
       top: calc(50% + 350px);
       left: 50%;
@@ -129,9 +146,11 @@
 
   <img src="https://assets.onecompiler.app/43n2pjfqw/43n2q84vp/11.jpg" id="center-image">
   <div id="love-text">LOVE YOU</div>
-  <div id="message-text">
+  <div id="message-text1">
     Gặp em là một điều thật tuyệt vời. Có lẽ anh đã giành hết may mắn vào điều đó.<br>
     Bởi vì anh đã từng một mình rất lâu trước đó, nên sự xuất hiện của em như thể là một điều dịu dàng nhất trong cuộc sống bộn bề này.<br>
+  </div>
+  <div id="message-text1">
     Nếu có thể, anh muốn hạnh phúc của anh...<br>
     Có em, luôn có em trong đó.
   </div>
