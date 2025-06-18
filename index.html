@@ -18,7 +18,7 @@
       background: rgba(0,0,0,0.85);
       color: #fff;
       font-family: 'Segoe UI', sans-serif;
-      font-size: 24px;
+      font-size: 34px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -29,8 +29,8 @@
 
     #start-button {
       margin-top: 20px;
-      padding: 10px 30px;
-      font-size: 20px;
+      padding: 30px 50px;
+      font-size: 34px;
       background-color: #ff69b4;
       color: white;
       border: none;
@@ -100,7 +100,7 @@
       width: 90%;
       max-width: 600px;
       font-family: 'Segoe UI', sans-serif;
-      font-size: 21px;
+      font-size: 28px;
       color: #ffb6c1;
       text-align: center;
       line-height: 1.6;
@@ -140,27 +140,23 @@
 
   <script>
     function typeText(element, text, speed = 40) {
-      element.innerHTML = '';
-      let i = 0;
-      function typing() {
-        if (i < text.length) {
-          if (text[i] === '\') {
-            if (text[i+1] === 'n') {
-              element.innerHTML += '<br>';
-              i += 2;
-            } else {
-              element.innerHTML += text[i++];
-            }
-          } else {
-            element.innerHTML += text[i++];
-          }
-          setTimeout(typing, speed);
-        }
+  element.innerHTML = '';
+  let i = 0;
+  function typing() {
+    if (i < text.length) {
+      if (text.substr(i, 4) === '<br>') {
+        element.innerHTML += '<br>';
+        i += 4;
+      } else {
+        element.innerHTML += text[i];
+        i++;
       }
-      typing();
+      setTimeout(typing, speed);
     }
-
-    document.getElementById('start-button').addEventListener('click', function () {
+  }
+  typing();
+}
+document.getElementById('start-button').addEventListener('click', function () {
       document.getElementById('start-overlay').style.display = 'none';
       document.getElementById('center-image').style.display = 'block';
       document.getElementById('love-text').style.display = 'block';
@@ -174,6 +170,7 @@ Có em, luôn có em trong đó.`;
       document.getElementById('bg-music').play();
     });
   </script>
+
   <!-- Spiral only (no flying heart) -->
   <script>
     const spiralCanvas = document.getElementById('spiral-canvas');
