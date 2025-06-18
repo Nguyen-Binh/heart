@@ -11,6 +11,21 @@
       background: #000;
     }
 
+    canvas {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #spiral-canvas {
+      z-index: 0;
+    }
+
+    #pinkboard {
+      z-index: 1;
+    }
+
     #start-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -39,21 +54,6 @@
       box-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
     }
 
-    canvas {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    #spiral-canvas {
-      z-index: 0;
-    }
-
-    #pinkboard {
-      z-index: 1;
-    }
-
     @keyframes pulse-glow {
       0% { text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493; }
       50% { text-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493; }
@@ -61,37 +61,35 @@
     }
 
     @keyframes loveZoom {
-  0% {
-    transform: translateX(-50%) scale(1);
-    color: #ff69b4;
-    text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
-  }
-  100% {
-    transform: translateX(-50%) scale(1.8);
-    color: red;
-    text-shadow: 0 0 30px red, 0 0 60px red, 0 0 90px red;
-  }
-}
+      0% {
+        transform: translateX(-50%) scale(1);
+        color: #ff69b4;
+        text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+      }
+      100% {
+        transform: translateX(-50%) scale(1.8);
+        color: red;
+        text-shadow: 0 0 30px red, 0 0 60px red, 0 0 90px red;
+      }
+    }
 
+    @keyframes bounceGlow {
+      0%, 100% {
+        transform: translateX(-50%) scale(1.8) translateY(0);
+        color: red;
+        text-shadow: 0 0 30px red, 0 0 60px red, 0 0 100px red;
+      }
+      50% {
+        transform: translateX(-50%) scale(1.8) translateY(-10px);
+        color: red;
+        text-shadow: 0 0 40px red, 0 0 80px red, 0 0 120px red;
+      }
+    }
 
     @keyframes floatUpDown {
       0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
       50% { transform: translate(-50%, -50%) translateY(-10px); }
     }
-
-@keyframes bounceGlow {
-  0%, 100% {
-    transform: translateX(-50%) scale(1.8) translateY(0);
-    color: red;
-    text-shadow: 0 0 30px red, 0 0 60px red, 0 0 100px red;
-  }
-  50% {
-    transform: translateX(-50%) scale(1.8) translateY(-10px);
-    color: red;
-    text-shadow: 0 0 40px red, 0 0 80px red, 0 0 120px red;
-  }
-}
-
 
     .pulse-glow {
       animation: pulse-glow 2s ease-in-out infinite;
@@ -126,7 +124,6 @@
       transform: translateX(-50%) scale(1);
       font-family: 'Comic Sans MS', cursive, sans-serif;
       font-size: 30px;
-      color: #ff69b4;
       z-index: 3;
       display: none;
     }
@@ -221,7 +218,7 @@
       });
     });
 
-    // Spiral background
+    // Spiral galaxy
     const spiralCanvas = document.getElementById('spiral-canvas');
     const sCtx = spiralCanvas.getContext('2d');
     spiralCanvas.width = window.innerWidth;
@@ -252,7 +249,7 @@
     }
     renderSpiral();
 
-    // Heart particles
+    // Heart Particles
     const pinkCanvas = document.getElementById('pinkboard');
     const ctx = pinkCanvas.getContext('2d');
     pinkCanvas.width = window.innerWidth;
@@ -268,23 +265,15 @@
       }
     };
 
-    function Point(x = 0, y = 0) {
-      this.x = x; this.y = y;
-    }
+    function Point(x = 0, y = 0) { this.x = x; this.y = y; }
     Point.prototype.clone = function () { return new Point(this.x, this.y); };
-    Point.prototype.length = function (length) {
-      if (length === undefined)
-        return Math.sqrt(this.x * this.x + this.y * this.y);
-      this.normalize();
-      this.x *= length;
-      this.y *= length;
-      return this;
+    Point.prototype.length = function (l) {
+      if (l === undefined) return Math.sqrt(this.x * this.x + this.y * this.y);
+      this.normalize(); this.x *= l; this.y *= l; return this;
     };
     Point.prototype.normalize = function () {
-      const length = this.length();
-      this.x /= length;
-      this.y /= length;
-      return this;
+      const len = this.length();
+      this.x /= len; this.y /= len; return this;
     };
 
     function Particle() {
@@ -294,10 +283,8 @@
       this.age = 0;
     }
     Particle.prototype.initialize = function (x, y, dx, dy) {
-      this.position.x = x;
-      this.position.y = y;
-      this.velocity.x = dx;
-      this.velocity.y = dy;
+      this.position.x = x; this.position.y = y;
+      this.velocity.x = dx; this.velocity.y = dy;
       this.acceleration.x = dx * settings.particles.effect;
       this.acceleration.y = dy * settings.particles.effect;
       this.age = 0;
@@ -355,7 +342,6 @@
       const ctx = canvas.getContext('2d');
       canvas.width = settings.particles.size;
       canvas.height = settings.particles.size;
-
       ctx.beginPath();
       let t = -Math.PI;
       const to = (t) => {
@@ -374,7 +360,6 @@
       ctx.closePath();
       ctx.fillStyle = '#ea80b0';
       ctx.fill();
-
       const img = new Image();
       img.src = canvas.toDataURL();
       return img;
@@ -403,6 +388,7 @@
       particles.update(dt);
       particles.draw(ctx, heartImage);
     }
+
     renderHeart();
   </script>
 </body>
