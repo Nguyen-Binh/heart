@@ -82,7 +82,7 @@
       position: absolute;
       top: calc(50% + 85px);
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) scale(1);
       font-family: 'Comic Sans MS', cursive, sans-serif;
       font-size: 30px;
       color: #ff69b4;
@@ -120,6 +120,21 @@
     @keyframes fadein {
       from { opacity: 0; transform: translateX(-50%) translateY(20px); }
       to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    @keyframes loveZoom {
+      0% {
+        transform: translateX(-50%) scale(1);
+        text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+      }
+      100% {
+        transform: translateX(-50%) scale(1.8);
+        text-shadow: 0 0 30px #ff69b4, 0 0 60px #ff1493, 0 0 90px #ff1493;
+      }
+    }
+
+    .love-zoom-effect {
+      animation: loveZoom 1.6s ease-out forwards;
     }
   </style>
 </head>
@@ -165,7 +180,7 @@
     }
 
     document.getElementById('start-button').addEventListener('click', async function () {
-      document.getElementById('bg-music').play(); // Phát nhạc ngay khi bấm OK
+      document.getElementById('bg-music').play();
 
       document.getElementById('start-overlay').style.display = 'none';
       document.getElementById('center-image').style.display = 'block';
@@ -174,15 +189,20 @@
       const messageText1 = document.getElementById('message-text1');
       const messageText2 = document.getElementById('message-text2');
 
-      const content1 = `Gặp em là một điều thật tuyệt vời. Có lẽ anh đã giành hết may mắn vào điều đó.<br> Bởi vì anh đã từng một mình rất lâu trước đó, nên sự xuất hiện của em như thể là một điều dịu dàng nhất trên hành trình của anh.`;
+      const content1 = `Gặp em là một điều thật tuyệt vời. Có lẽ anh đã giành hết may mắn vào điều đó.<br>
+Bởi vì anh đã từng một mình rất lâu trước đó, nên sự xuất hiện của em như thể là một điều dịu dàng nhất trên hành trình của anh.`;
 
-      const content2 = `Nếu có thể, anh muốn hạnh phúc của anh...<br> CÓ EM, LUÔN CÓ EM TRONG ĐÓ.<br> Vậy nhé !!!!!`;
+      const content2 = `Nếu có thể, anh muốn hạnh phúc của anh...<br>
+CÓ EM, LUÔN CÓ EM TRONG ĐÓ.<br>
+Vậy nhé !!!!!`;
 
       messageText1.style.display = 'block';
       await typeText(messageText1, content1);
 
       messageText2.style.display = 'block';
       await typeText(messageText2, content2);
+
+      document.getElementById('love-text').classList.add('love-zoom-effect');
     });
   </script>
 <script>
