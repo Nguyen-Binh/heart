@@ -43,8 +43,15 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      z-index: 1;
       display: block;
+    }
+
+    #spiral-canvas {
+      z-index: 0;
+    }
+
+    #pinkboard {
+      z-index: 1;
     }
 
     @keyframes pulse-glow {
@@ -54,15 +61,37 @@
     }
 
     @keyframes loveZoom {
-      0% {
-        transform: translateX(-50%) scale(1);
-        text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
-      }
-      100% {
-        transform: translateX(-50%) scale(1.8);
-        text-shadow: 0 0 30px #ff69b4, 0 0 60px #ff1493, 0 0 90px #ff1493;
-      }
+  0% {
+    transform: translateX(-50%) scale(1);
+    color: #ff69b4;
+    text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+  }
+  100% {
+    transform: translateX(-50%) scale(1.8);
+    color: red;
+    text-shadow: 0 0 30px red, 0 0 60px red, 0 0 90px red;
+  }
+}
+
+
+    @keyframes floatUpDown {
+      0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
+      50% { transform: translate(-50%, -50%) translateY(-10px); }
     }
+
+@keyframes bounceGlow {
+  0%, 100% {
+    transform: translateX(-50%) scale(1.8) translateY(0);
+    color: red;
+    text-shadow: 0 0 30px red, 0 0 60px red, 0 0 100px red;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.8) translateY(-10px);
+    color: red;
+    text-shadow: 0 0 40px red, 0 0 80px red, 0 0 120px red;
+  }
+}
+
 
     .pulse-glow {
       animation: pulse-glow 2s ease-in-out infinite;
@@ -70,6 +99,10 @@
 
     .love-zoom-effect {
       animation: loveZoom 1.5s ease-out forwards;
+    }
+
+    .bounce-glow {
+      animation: bounceGlow 1s ease-in-out infinite;
     }
 
     #center-image {
@@ -84,11 +117,6 @@
       box-shadow: 0 0 25px rgba(255, 105, 180, 0.8), 0 0 50px rgba(255, 105, 180, 0.5);
       animation: pulse-glow 3s ease-in-out infinite, floatUpDown 6s ease-in-out infinite;
       display: none;
-    }
-
-    @keyframes floatUpDown {
-      0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
-      50% { transform: translate(-50%, -50%) translateY(-10px); }
     }
 
     #love-text {
@@ -119,28 +147,8 @@
       display: none;
     }
 
-    #message-text1 {
-      top: 15%;
-    }
-
-    #message-text2 {
-      top: calc(50% + 350px);
-    }
- @keyframes bounceGlow {
-  0%, 100% {
-    transform: translateX(-50%) scale(1.8) translateY(0);
-    text-shadow: 0 0 30px #ff69b4, 0 0 60px #ff1493, 0 0 100px #ff1493;
-  }
-  50% {
-    transform: translateX(-50%) scale(1.8) translateY(-10px);
-    text-shadow: 0 0 40px #ff69b4, 0 0 80px #ff1493, 0 0 120px #ff1493;
-  }
-}
-
-.bounce-glow {
-  animation: bounceGlow 1s ease-in-out infinite;
-}
-
+    #message-text1 { top: 15%; }
+    #message-text2 { top: calc(50% + 350px); }
   </style>
 </head>
 <body>
@@ -157,8 +165,8 @@
   <div id="love-text">LOVE YOU</div>
   <div id="message-text1"></div>
   <div id="message-text2"></div>
-  <canvas id="pinkboard"></canvas>
   <canvas id="spiral-canvas"></canvas>
+  <canvas id="pinkboard"></canvas>
 
   <script>
     function typeText(element, text, speed = 40) {
@@ -185,7 +193,6 @@
 
     document.getElementById('start-button').addEventListener('click', async function () {
       document.getElementById('bg-music').play();
-
       document.getElementById('start-overlay').style.display = 'none';
       document.getElementById('center-image').style.display = 'block';
 
@@ -197,7 +204,6 @@
       const messageText2 = document.getElementById('message-text2');
 
       const content1 = `Gặp em là một điều thật tuyệt vời. Có lẽ anh đã giành hết may mắn vào điều đó.<br> Bởi vì anh đã từng một mình rất lâu trước đó, nên sự xuất hiện của em như thể là một điều dịu dàng nhất trên hành trình của anh.`;
-
       const content2 = `Nếu có thể, anh muốn hạnh phúc của anh...<br> CÓ EM, LUÔN CÓ EM TRONG ĐÓ.<br> Vậy nhé !!!!!`;
 
       messageText1.style.display = 'block';
@@ -209,195 +215,195 @@
       loveText.classList.remove('pulse-glow');
       loveText.classList.add('love-zoom-effect');
       loveText.addEventListener('animationend', function handler() {
-      loveText.classList.remove('love-zoom-effect');
-      loveText.classList.add('bounce-glow');
-      loveText.removeEventListener('animationend', handler);
-        });
+        loveText.classList.remove('love-zoom-effect');
+        loveText.classList.add('bounce-glow');
+        loveText.removeEventListener('animationend', handler);
+      });
     });
-  </script>
-<script>
-  const pinkCanvas = document.getElementById('pinkboard');
-  const ctx = pinkCanvas.getContext('2d');
-  pinkCanvas.width = window.innerWidth;
-  pinkCanvas.height = window.innerHeight;
 
-  const settings = {
-    particles: {
-      length: 1200,
-      duration: 2,
-      velocity: 135,
-      effect: -0.35,
-      size: 14,
+    // Spiral background
+    const spiralCanvas = document.getElementById('spiral-canvas');
+    const sCtx = spiralCanvas.getContext('2d');
+    spiralCanvas.width = window.innerWidth;
+    spiralCanvas.height = window.innerHeight;
+
+    const stars = [];
+    for (let i = 0; i < 200; i++) {
+      stars.push({
+        angle: Math.random() * 2 * Math.PI,
+        radius: Math.random() * (spiralCanvas.width / 2),
+        speed: 0.001 + Math.random() * 0.003,
+        size: 1 + Math.random() * 1.5
+      });
     }
-  };
 
-  const Point = function (x, y) {
-    this.x = x || 0;
-    this.y = y || 0;
-  };
-  Point.prototype.clone = function () { return new Point(this.x, this.y); };
-  Point.prototype.length = function (length) {
-    if (length === undefined)
-      return Math.sqrt(this.x * this.x + this.y * this.y);
-    this.normalize();
-    this.x *= length;
-    this.y *= length;
-    return this;
-  };
-  Point.prototype.normalize = function () {
-    const length = this.length();
-    this.x /= length;
-    this.y /= length;
-    return this;
-  };
-
-  const Particle = function () {
-    this.position = new Point();
-    this.velocity = new Point();
-    this.acceleration = new Point();
-    this.age = 0;
-  };
-  Particle.prototype.initialize = function (x, y, dx, dy) {
-    this.position.x = x;
-    this.position.y = y;
-    this.velocity.x = dx;
-    this.velocity.y = dy;
-    this.acceleration.x = dx * settings.particles.effect;
-    this.acceleration.y = dy * settings.particles.effect;
-    this.age = 0;
-  };
-  Particle.prototype.update = function (deltaTime) {
-    this.position.x += this.velocity.x * deltaTime;
-    this.position.y += this.velocity.y * deltaTime;
-    this.velocity.x += this.acceleration.x * deltaTime;
-    this.velocity.y += this.acceleration.y * deltaTime;
-    this.age += deltaTime;
-  };
-  Particle.prototype.draw = function (context, image) {
-    const ease = (t) => (--t) * t * t + 1;
-    const size = image.width * ease(this.age / settings.particles.duration);
-    context.globalAlpha = 1 - this.age / settings.particles.duration;
-    context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
-  };
-
-  const ParticlePool = function (length) {
-    this.particles = new Array(length);
-    for (let i = 0; i < this.particles.length; i++) {
-      this.particles[i] = new Particle();
+    function renderSpiral() {
+      sCtx.clearRect(0, 0, spiralCanvas.width, spiralCanvas.height);
+      sCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      for (const star of stars) {
+        star.angle += star.speed;
+        const x = spiralCanvas.width / 2 + star.radius * Math.cos(star.angle);
+        const y = spiralCanvas.height / 2 + star.radius * Math.sin(star.angle);
+        sCtx.beginPath();
+        sCtx.arc(x, y, star.size, 0, 2 * Math.PI);
+        sCtx.fill();
+      }
+      requestAnimationFrame(renderSpiral);
     }
-    this.firstActive = 0;
-    this.firstFree = 0;
-    this.duration = settings.particles.duration;
-  };
-  ParticlePool.prototype.add = function (x, y, dx, dy) {
-    this.particles[this.firstFree].initialize(x, y, dx, dy);
-    this.firstFree = (this.firstFree + 1) % this.particles.length;
-    if (this.firstActive === this.firstFree) {
-      this.firstActive = (this.firstActive + 1) % this.particles.length;
-    }
-  };
-  ParticlePool.prototype.update = function (deltaTime) {
-    let i;
-    if (this.firstActive < this.firstFree) {
-      for (i = this.firstActive; i < this.firstFree; i++) {
-        this.particles[i].update(deltaTime);
-      }
-    } else {
-      for (i = this.firstActive; i < this.particles.length; i++) {
-        this.particles[i].update(deltaTime);
-      }
-      for (i = 0; i < this.firstFree; i++) {
-        this.particles[i].update(deltaTime);
-      }
-    }
-    while (this.particles[this.firstActive].age >= this.duration && this.firstActive !== this.firstFree) {
-      this.firstActive = (this.firstActive + 1) % this.particles.length;
-    }
-  };
-  ParticlePool.prototype.draw = function (context, image) {
-    let i;
-    if (this.firstActive < this.firstFree) {
-      for (i = this.firstActive; i < this.firstFree; i++) {
-        this.particles[i].draw(context, image);
-      }
-    } else {
-      for (i = this.firstActive; i < this.particles.length; i++) {
-        this.particles[i].draw(context, image);
-      }
-      for (i = 0; i < this.firstFree; i++) {
-        this.particles[i].draw(context, image);
-      }
-    }
-  };
+    renderSpiral();
 
-  function pointOnHeart(t) {
-    return new Point(
-      160 * Math.pow(Math.sin(t), 3),
-      130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
-    );
-  }
+    // Heart particles
+    const pinkCanvas = document.getElementById('pinkboard');
+    const ctx = pinkCanvas.getContext('2d');
+    pinkCanvas.width = window.innerWidth;
+    pinkCanvas.height = window.innerHeight;
 
-  const createHeartImage = () => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = settings.particles.size;
-    canvas.height = settings.particles.size;
-
-    ctx.beginPath();
-    let t = -Math.PI;
-    const to = (t) => {
-      const point = pointOnHeart(t);
-      point.x = settings.particles.size / 3 + point.x * settings.particles.size / 300;
-      point.y = settings.particles.size / 3 - point.y * settings.particles.size / 300;
-      return point;
+    const settings = {
+      particles: {
+        length: 1200,
+        duration: 2,
+        velocity: 135,
+        effect: -0.35,
+        size: 14,
+      }
     };
-    let point = to(t);
-    ctx.moveTo(point.x, point.y);
-    while (t < Math.PI) {
-      t += 0.01;
-      point = to(t);
-      ctx.lineTo(point.x, point.y);
+
+    function Point(x = 0, y = 0) {
+      this.x = x; this.y = y;
     }
-    ctx.closePath();
-    ctx.fillStyle = '#ea80b0';
-    ctx.fill();
+    Point.prototype.clone = function () { return new Point(this.x, this.y); };
+    Point.prototype.length = function (length) {
+      if (length === undefined)
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+      this.normalize();
+      this.x *= length;
+      this.y *= length;
+      return this;
+    };
+    Point.prototype.normalize = function () {
+      const length = this.length();
+      this.x /= length;
+      this.y /= length;
+      return this;
+    };
 
-    const img = new Image();
-    img.src = canvas.toDataURL();
-    return img;
-  };
+    function Particle() {
+      this.position = new Point();
+      this.velocity = new Point();
+      this.acceleration = new Point();
+      this.age = 0;
+    }
+    Particle.prototype.initialize = function (x, y, dx, dy) {
+      this.position.x = x;
+      this.position.y = y;
+      this.velocity.x = dx;
+      this.velocity.y = dy;
+      this.acceleration.x = dx * settings.particles.effect;
+      this.acceleration.y = dy * settings.particles.effect;
+      this.age = 0;
+    };
+    Particle.prototype.update = function (dt) {
+      this.position.x += this.velocity.x * dt;
+      this.position.y += this.velocity.y * dt;
+      this.velocity.x += this.acceleration.x * dt;
+      this.velocity.y += this.acceleration.y * dt;
+      this.age += dt;
+    };
+    Particle.prototype.draw = function (ctx, img) {
+      const ease = (t) => (--t) * t * t + 1;
+      const size = img.width * ease(this.age / settings.particles.duration);
+      ctx.globalAlpha = 1 - this.age / settings.particles.duration;
+      ctx.drawImage(img, this.position.x - size / 2, this.position.y - size / 2, size, size);
+    };
 
-  const heartImage = createHeartImage();
-  const particles = new ParticlePool(settings.particles.length);
-  const particleRate = settings.particles.length / settings.particles.duration;
-  let time;
+    function ParticlePool(length) {
+      this.particles = new Array(length).fill().map(() => new Particle());
+      this.firstActive = 0;
+      this.firstFree = 0;
+      this.duration = settings.particles.duration;
+    }
+    ParticlePool.prototype.add = function (x, y, dx, dy) {
+      this.particles[this.firstFree].initialize(x, y, dx, dy);
+      this.firstFree = (this.firstFree + 1) % this.particles.length;
+      if (this.firstActive === this.firstFree) {
+        this.firstActive = (this.firstActive + 1) % this.particles.length;
+      }
+    };
+    ParticlePool.prototype.update = function (dt) {
+      for (let i = this.firstActive; i !== this.firstFree; i = (i + 1) % this.particles.length) {
+        this.particles[i].update(dt);
+      }
+      while (this.particles[this.firstActive].age >= this.duration && this.firstActive !== this.firstFree) {
+        this.firstActive = (this.firstActive + 1) % this.particles.length;
+      }
+    };
+    ParticlePool.prototype.draw = function (ctx, img) {
+      for (let i = this.firstActive; i !== this.firstFree; i = (i + 1) % this.particles.length) {
+        this.particles[i].draw(ctx, img);
+      }
+    };
 
-  function render() {
-    requestAnimationFrame(render);
-    const newTime = Date.now() / 1000;
-    const deltaTime = newTime - (time || newTime);
-    time = newTime;
-
-    ctx.clearRect(0, 0, pinkCanvas.width, pinkCanvas.height);
-
-    const amount = Math.round(particleRate * deltaTime);
-    for (let i = 0; i < amount; i++) {
-      const pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
-      const dir = pos.clone().length(settings.particles.velocity);
-      particles.add(
-        pinkCanvas.width / 2 + pos.x,
-        pinkCanvas.height / 2 - pos.y,
-        dir.x,
-        -dir.y
+    function pointOnHeart(t) {
+      return new Point(
+        160 * Math.pow(Math.sin(t), 3),
+        130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
       );
     }
 
-    particles.update(deltaTime);
-    particles.draw(ctx, heartImage);
-  }
+    function createHeartImage() {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = settings.particles.size;
+      canvas.height = settings.particles.size;
 
-  render();
-</script>
+      ctx.beginPath();
+      let t = -Math.PI;
+      const to = (t) => {
+        const p = pointOnHeart(t);
+        p.x = settings.particles.size / 3 + p.x * settings.particles.size / 300;
+        p.y = settings.particles.size / 3 - p.y * settings.particles.size / 300;
+        return p;
+      };
+      let point = to(t);
+      ctx.moveTo(point.x, point.y);
+      while (t < Math.PI) {
+        t += 0.01;
+        point = to(t);
+        ctx.lineTo(point.x, point.y);
+      }
+      ctx.closePath();
+      ctx.fillStyle = '#ea80b0';
+      ctx.fill();
 
+      const img = new Image();
+      img.src = canvas.toDataURL();
+      return img;
+    }
+
+    const heartImage = createHeartImage();
+    const particles = new ParticlePool(settings.particles.length);
+    const particleRate = settings.particles.length / settings.particles.duration;
+    let time;
+
+    function renderHeart() {
+      requestAnimationFrame(renderHeart);
+      const now = Date.now() / 1000;
+      const dt = now - (time || now);
+      time = now;
+
+      ctx.clearRect(0, 0, pinkCanvas.width, pinkCanvas.height);
+
+      const amount = Math.round(particleRate * dt);
+      for (let i = 0; i < amount; i++) {
+        const pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+        const dir = pos.clone().length(settings.particles.velocity);
+        particles.add(pinkCanvas.width / 2 + pos.x, pinkCanvas.height / 2 - pos.y, dir.x, -dir.y);
+      }
+
+      particles.update(dt);
+      particles.draw(ctx, heartImage);
+    }
+    renderHeart();
+  </script>
 </body>
 </html>
