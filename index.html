@@ -11,6 +11,33 @@
       background: #000;
     }
 
+    #start-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #start-button {
+      margin-top: 20px;
+      padding: 10px 30px;
+      font-size: 20px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+    }
+
     canvas {
       position: absolute;
       width: 100%;
@@ -36,6 +63,7 @@
       border-radius: 12px;
       box-shadow: 0 0 25px rgba(255, 105, 180, 0.8), 0 0 50px rgba(255, 105, 180, 0.5);
       animation: pulse-glow 3s ease-in-out infinite, floatUpDown 6s ease-in-out infinite;
+      display: none;
     }
 
     @keyframes pulse-glow {
@@ -48,27 +76,7 @@
       0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
       50% { transform: translate(-50%, -50%) translateY(-10px); }
     }
-    #message-text {
-      position: absolute;
-      top: calc(50% + 350px);
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 600px;
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 21px;
-      color: #ffb6c1;
-      text-align: center;
-      line-height: 1.6;
-      z-index: 3;
-      animation: fadein 3s ease-in-out;
-      white-space: pre-line;
-    }
 
-    @keyframes fadein {
-      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-      to { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
     #love-text {
       position: absolute;
       top: calc(50% + 85px);
@@ -80,21 +88,34 @@
       text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
       z-index: 3;
       animation: pulse-glow 2s ease-in-out infinite;
+      display: none;
     }
   </style>
 </head>
-  
-<audio autoplay loop>
+
+<audio id="bg-music" loop>
   <source src="https://nguyen-binh.github.io/heart/My_love.mp3" type="audio/mpeg">
-  Trình duyệt của bạn không hỗ trợ phát nhạc.
 </audio>
 
 <body>
+  <div id="start-overlay">
+    <div>Bạn Đoàn Thu Thủy đã sẵn sàng nhận món quà này chưa?</div>
+    <button id="start-button">OK</button>
+  </div>
+
   <img src="https://assets.onecompiler.app/43n2pjfqw/43n2q84vp/11.jpg" id="center-image">
   <div id="love-text">LOVE YOU</div>
-      <!--div id="message-text">Gặp em là một điều thật tuyệt vời. Có lẽ anh đã giành hết may mắn vào điều đó.<br> Bởi vì anh đã từng một mình rất lâu trước đó, nên sự xuất hiện của em như thể là 1 điều dịu dàng nhất trong cuộc sống bộn bề này.<br> Nếu có thể, anh muốn hạnh phúc của anh...<br> Có em, luôn có em trong đó.</div> -->
   <canvas id="pinkboard"></canvas>
   <canvas id="spiral-canvas"></canvas>
+
+  <script>
+    document.getElementById('start-button').addEventListener('click', function () {
+      document.getElementById('start-overlay').style.display = 'none';
+      document.getElementById('center-image').style.display = 'block';
+      document.getElementById('love-text').style.display = 'block';
+      document.getElementById('bg-music').play();
+    });
+  </script>
 
   <!-- Spiral only (no flying heart) -->
   <script>
@@ -120,7 +141,7 @@
         const radius = 30 + i * 0.6;
         const x = centerX + radius * Math.cos(angle);
         const y = centerY + radius * Math.sin(angle);
-        ctxSpiral.fillStyle = `rgba(255, 255, 255, ${0.02 + 0.01 * i})`;
+        ctxSpiral.fillStyle = rgba(255, 255, 255, ${0.02 + 0.01 * i});
         ctxSpiral.beginPath();
         ctxSpiral.arc(x, y, 1.5, 0, Math.PI * 2);
         ctxSpiral.fill();
