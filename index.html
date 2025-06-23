@@ -176,38 +176,26 @@
       }
     }
 
-    #love-question {
-      display: none;
-      z-index: 10;
-      position: fixed;
-      top: 45%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      font-size: 32px;
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
-    }
-
-    #yes-btn, #no-btn {
-      padding: 12px 32px;
-      font-size: 24px;
-      border-radius: 10px;
-      margin: 20px 10px 0;
-      border: none;
-      cursor: pointer;
-    }
-
-    #yes-btn {
-  background-color: #ff69b4;
-  color: white;
-  font-weight: bold;
+#love-question {
+  display: none;
+  z-index: 10;
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 32px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #fff;
 }
 
-    #no-btn {
-  background-color: #444;
-  color: white;
-  font-weight: bold;
+#yes-btn, #no-btn {
+  padding: 12px 32px;
+  font-size: 24px;
+  border-radius: 10px;
+  margin: 10px 0;
+  border: none;
+  cursor: pointer;
 }
   </style>
 </head>
@@ -223,6 +211,7 @@
 
   <img src="https://nguyen-binh.github.io/heart/Mylove_1.jpg" id="center-image">
   <div id="love-text">LOVE YOU</div>
+  <div id="response-text" style="display: none; font-size: 32px; color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; position: absolute; top: calc(50% + 160px); left: 50%; transform: translateX(-50%); z-index: 3;"></div>
   <div id="message-text1"></div>
   <div id="message-text2"></div>
   <canvas id="spiral-canvas"></canvas>
@@ -230,11 +219,13 @@
   <div id="heart-explosion"></div>
 
   <!-- ❤️ Câu hỏi tình yêu -->
-  <div id="love-question">
-    <div style="margin-bottom: 20px;">Làm người yêu anh nhé? 💖</div>
-    <button id="yes-btn">❤️ Đồng ý</button>
-    <button id="no-btn">💔Không đồng ý</button>
-  </div>
+<div id="love-question" style="display: none; z-index: 10; position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%); text-align: center; font-size: 32px; font-family: 'Segoe UI', sans-serif; color: #fff;">
+
+  <div style="margin-bottom: 20px;">Làm người yêu anh nhé? 💖</div>
+  <button id="yes-btn" style="margin: 5px 0;">❤️ <br> Đồng ý</button>
+  <button id="no-btn" style="margin: 10px 0;">💔Không đồng ý</button>
+</div>
+
 
   <script>
     function typeText(element, text, speed = 40) {
@@ -305,7 +296,11 @@
 
         // ❣️ Show question after explosion
         setTimeout(() => {
-          document.getElementById('love-question').style.display = 'block';
+         const loveQuestion = document.getElementById('love-question');
+        loveQuestion.style.display = 'flex';
+        loveQuestion.style.flexDirection = 'column';
+        loveQuestion.style.alignItems = 'center';
+
         }, 3000);
       });
     });
@@ -321,7 +316,7 @@ noBtn.style.position = 'relative';
 noBtn.style.transition = 'top 0.3s ease';
 
 function moveNoBtnDown() {
-  noBtnOffset += 30*yesScale; // Mỗi lần tụt xuống 20px
+  noBtnOffset += 50*yesScale; // Mỗi lần tụt xuống 20px
   noBtn.style.top = `${noBtnOffset}px`;
 
   // Phóng to nút Đồng ý mỗi lần
@@ -340,7 +335,11 @@ noBtn.addEventListener('click', moveNoBtnDown);
       yesBtn.style.transition = 'transform 0.3s ease';
 
       setTimeout(() => {
-        document.getElementById('love-question').innerHTML = `<div style="font-size:36px;">Yêu anh rồi nhé 😘❤️</div>`;
+        document.getElementById('love-question').style.display = 'none';
+        const responseText = document.getElementById('response-text');
+        responseText.innerHTML = 'Yêu anh rồi nhé 😘❤️';
+        responseText.style.display = 'block';
+
       }, 1000);
 
       // 💥 Trái tim nổ 9 lần liên tục
