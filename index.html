@@ -320,9 +320,11 @@ function moveNoBtnDown() {
   noBtn.style.top = `${noBtnOffset}px`;
 
   // Phóng to nút Đồng ý mỗi lần
-  yesScale *= 2;
-  yesBtn.style.transform = `scale(${yesScale})`;
-  yesBtn.style.transition = 'transform 0.3s ease';
+let currentFontSize = parseFloat(window.getComputedStyle(yesBtn).fontSize); // Lấy cỡ chữ hiện tại
+let newFontSize = currentFontSize *2; // Tăng cỡ chữ lên 1.2 lần mỗi lần
+yesBtn.style.fontSize = `${newFontSize}px`;
+yesBtn.style.transition = 'font-size 0.3s ease';
+
 }
 
 noBtn.addEventListener('mouseover', moveNoBtnDown);
