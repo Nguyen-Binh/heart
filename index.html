@@ -323,7 +323,7 @@ function moveNoBtnDown() {
 let currentFontSize = parseFloat(window.getComputedStyle(yesBtn).fontSize); // Lấy cỡ chữ hiện tại
 let newFontSize = currentFontSize *2; // Tăng cỡ chữ lên 1.2 lần mỗi lần
 yesBtn.style.fontSize = `${newFontSize}px`;
-yesBtn.style.transition = 'font-size 0.3s ease';
+yesBtn.style.transition = 'font-size 0.05s linear';
 
 }
 
@@ -333,7 +333,7 @@ noBtn.addEventListener('click', moveNoBtnDown);
 
 
     yesBtn.addEventListener('click', () => {
-      yesBtn.style.transition = 'transform 0.3s ease';
+      yesBtn.style.transition = 'transform 0.05s linear';
 
       setTimeout(() => {
         document.getElementById('love-question').style.display = 'none';
