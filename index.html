@@ -18,13 +18,8 @@
       display: block;
     }
 
-    #spiral-canvas {
-      z-index: 0;
-    }
-
-    #pinkboard {
-      z-index: 1;
-    }
+    #spiral-canvas { z-index: 0; }
+    #pinkboard { z-index: 1; }
 
     #start-overlay {
       position: fixed;
@@ -119,7 +114,7 @@
 
     #love-text {
       position: absolute;
-      top: calc(50% + 85px);
+      top: calc(50% + 105px);
       left: 50%;
       transform: translateX(-50%) scale(1);
       font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -146,6 +141,51 @@
 
     #message-text1 { top: 15%; }
     #message-text2 { top: calc(50% + 350px); }
+
+    /* ❤️ Heart Explosion Popup */
+    #heart-explosion {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .heart-particle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      transform: rotate(45deg);
+      animation: explode 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    .heart-particle::before,
+    .heart-particle::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      border-radius: 50%;
+    }
+
+    .heart-particle::before { top: -10px; left: 0; }
+    .heart-particle::after { left: -10px; top: 0; }
+
+    @keyframes explode {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--x), var(--y)) scale(0.6);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -164,6 +204,7 @@
   <div id="message-text2"></div>
   <canvas id="spiral-canvas"></canvas>
   <canvas id="pinkboard"></canvas>
+  <div id="heart-explosion"></div>
 
   <script>
     function typeText(element, text, speed = 40) {
@@ -179,7 +220,7 @@
               element.innerHTML += text[i];
               i++;
             }
-            setTimeout(typing, speed);
+            setTimeout(typing, speed + Math.random() * 30);
           } else {
             resolve();
           }
@@ -187,6 +228,37 @@
         typing();
       });
     }
+
+  function triggerHeartExplosion() {
+  const container = document.getElementById('heart-explosion');
+
+  function spawnBurst(count) {
+    for (let i = 0; i < count; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart-particle';
+      const angle = Math.random() * 2 * Math.PI;
+      const distance = 80 + Math.random() * 80;
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance;
+      heart.style.setProperty('--x', `${x}px`);
+      heart.style.setProperty('--y', `${y}px`);
+      container.appendChild(heart);
+      setTimeout(() => container.removeChild(heart), 1000);
+    }
+  }
+
+  // 3 bursts, mỗi burst cách nhau 300ms
+  spawnBurst(99);
+  setTimeout(() => spawnBurst(99), 300);
+  setTimeout(() => spawnBurst(99), 600);
+  setTimeout(() => spawnBurst(99), 900);
+  setTimeout(() => spawnBurst(99), 1200);
+  setTimeout(() => spawnBurst(99), 1500);
+  setTimeout(() => spawnBurst(99), 1800);
+  setTimeout(() => spawnBurst(99), 2100);
+  setTimeout(() => spawnBurst(99), 2400);
+  setTimeout(() => spawnBurst(99), 2700);
+}
 
     document.getElementById('start-button').addEventListener('click', async function () {
       document.getElementById('bg-music').play();
@@ -214,11 +286,12 @@
       loveText.addEventListener('animationend', function handler() {
         loveText.classList.remove('love-zoom-effect');
         loveText.classList.add('bounce-glow');
+        triggerHeartExplosion();
         loveText.removeEventListener('animationend', handler);
       });
     });
 
-    // Spiral galaxy
+// Spiral galaxy
     const spiralCanvas = document.getElementById('spiral-canvas');
     const sCtx = spiralCanvas.getContext('2d');
     spiralCanvas.width = window.innerWidth;
